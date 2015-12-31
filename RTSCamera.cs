@@ -4,7 +4,7 @@ RTS camera for Unity
 
 The MIT License (MIT)
 
-Copyright (c) 2014 Evan Hahn
+Copyright (c) 2016 Evan Hahn, MFMG
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,11 +30,12 @@ SOFTWARE.
 using System.Collections;
 
 public class RTSCamera : MonoBehaviour {
-
+-
 	public bool disablePanning = false;
 	public bool disableSelect = false;
 	public bool disableZoom = false;
-
+	
+	public float version = 1f;
 	public float maximumZoom = 1f;
 	public float minimumZoom = 20f;
 	public Color selectColor = Color.green;
@@ -135,7 +136,7 @@ public class RTSCamera : MonoBehaviour {
 
 	private void startupChecks() {
 		if (!camera) {
-			throw new MissingComponentException("RTS Camera must be attached to a camera.");
+			throw new MissingComponentException("The RTS script is not attached to a camera. Please attach this to a camera!");
 		}
 		try {
 			Input.GetAxis(INPUT_MOUSE_BUTTONS[0]);
