@@ -1,21 +1,15 @@
 /*
-
 RTS camera for Unity
-
 The MIT License (MIT)
-
 Copyright (c) 2016 Evan Hahn, MFMG
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,14 +17,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
 */
 
 ﻿using UnityEngine;
 using System.Collections;
 
 public class RTSCamera : MonoBehaviour {
--
+
 	public bool disablePanning = false;
 	public bool disableSelect = false;
 	public bool disableZoom = false;
@@ -40,10 +33,10 @@ public class RTSCamera : MonoBehaviour {
 	public float minimumZoom = 20f;
 	public Color selectColor = Color.green;
 	public float selectLineWidth = 2f;
-
+	
 	public float lookDamper = 5f;
 	public string selectionObjectName = "RTS Selection";
-
+	
 	private readonly string[] INPUT_MOUSE_BUTTONS = {"Mouse Look", "Mouse Select"};
 	private bool ready;
 	private bool[] isDragging = new bool[2];
@@ -51,7 +44,7 @@ public class RTSCamera : MonoBehaviour {
 	private Texture2D pixel;
 	private GameObject selection;
 	private bool debugSelection;
-
+	
 	void Start() {
 		try {
 			startupChecks();
@@ -63,19 +56,19 @@ public class RTSCamera : MonoBehaviour {
 		setPixel(selectColor);
 		debugSelection = true;
 	}
-
+	
 	void Update() {
 		if (!ready) { return; }
 		updateDragging();
 		updateLook();
 		updateZoom();
 	}
-
+	
 	void OnGUI() {
 		if (!ready) { return; }
 		updateSelect();
 	}
-
+	
 	private void updateDragging() {
 		for (int index = 0; index <= 1; index ++) {
 			if (isClicking(index) && !isDragging[index]) {
@@ -91,7 +84,7 @@ public class RTSCamera : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	private void updateLook() {
 		if (!isDragging[0] || disablePanning) { return; }
 		var newPosition = transform.position;
@@ -100,7 +93,7 @@ public class RTSCamera : MonoBehaviour {
 		newPosition.y = newPosition.y - (mousePosition.y * camera.orthographicSize / lookDamper);
 		transform.position = newPosition;
 	}
-
+	
 	private void updateSelect() {
 		if (!isDragging[1] || disableSelect) { return; }
 		var x = selectStartPosition.x;
@@ -112,28 +105,28 @@ public class RTSCamera : MonoBehaviour {
 		GUI.DrawTexture(new Rect(x, y + height, width, selectLineWidth), pixel);
 		GUI.DrawTexture(new Rect(x + width, y, selectLineWidth, height), pixel);
 	}
-
+	
 	private void updateZoom() {
 		if (disableZoom) { return; }
 		var newSize = camera.orthographicSize - Input.GetAxis("Mouse ScrollWheel");
 		newSize = Mathf.Clamp(newSize, maximumZoom, minimumZoom);
 		camera.orthographicSize = newSize;
 	}
-
+	
 	private bool isClicking(int index) {
 		return Input.GetAxis(INPUT_MOUSE_BUTTONS[index]) == 1f;
 	}
-
+	
 	private Vector2 getMouseMovement() {
 		return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 	}
-
+	
 	private void setPixel(Color color) {
 		pixel = new Texture2D(1, 1);
 		pixel.SetPixel(0, 0, color);
 		pixel.Apply();
 	}
-
+	
 	private void startupChecks() {
 		if (!camera) {
 			throw new MissingComponentException("The RTS script is not attached to a camera. Please attach this to a camera!");
@@ -146,7 +139,7 @@ public class RTSCamera : MonoBehaviour {
 			                                       INPUT_MOUSE_BUTTONS[1] + " must be defined.");
 		}
 	}
-
+	
 	private void dropSelection(Vector3 screenStart, Vector3 screenEnd) {
 		if (!selection) {
 			selection = new GameObject(selectionObjectName);
@@ -175,5 +168,5 @@ public class RTSCamera : MonoBehaviour {
 				1f);
 		}
 	}
-
+	
 }
