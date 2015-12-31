@@ -5,7 +5,7 @@ Attach this script to a camera and then you can use it RTS-style.
 
 ![](http://evanhahn.com/tape/unity_rts.gif)
 
-*Note: I'm a Unity newbie, so I'm sorry if I don't know what I'm doing! Happy to accept pull requests.*
+*Note:This is a updated version of the script by EvanHahn. For Unity 5*
 
 ## Quick start
 
